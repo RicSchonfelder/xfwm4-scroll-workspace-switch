@@ -9,6 +9,38 @@ dragging a window**, taking the window along with you.
 * the dragged window stays attached and lands on the new workspace when you
   release the button
 
+## Install (one-liner via curl)
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/RicSchonfelder/xfwm4-scroll-workspace-switch/main/install.sh | sudo bash
+```
+
+The installer:
+
+* detects the **installed xfwm4 version** and only proceeds if it is in the
+  tested range (**4.20.x**) *and* the patch applies cleanly to the matching
+  upstream source (otherwise it changes nothing);
+* downloads that source from `archive.xfce.org`, applies the patch and builds it;
+* installs the patched binary (keeping a backup) and restarts xfwm4 **as your
+  desktop user**, reusing the running session environment (so xfconf keeps
+  working).
+
+Options (when piping, pass them after `bash -s --`):
+
+```sh
+# check only (no changes)
+curl -fsSL https://raw.githubusercontent.com/RicSchonfelder/xfwm4-scroll-workspace-switch/main/install.sh | sudo bash -s -- --check
+
+# uninstall (restores the original)
+curl -fsSL https://raw.githubusercontent.com/RicSchonfelder/xfwm4-scroll-workspace-switch/main/install.sh | sudo bash -s -- --uninstall
+
+# force a version outside the tested range / reinstall
+curl -fsSL https://raw.githubusercontent.com/RicSchonfelder/xfwm4-scroll-workspace-switch/main/install.sh | sudo bash -s -- --force
+```
+
+Other flags: `--version X.Y.Z` (build against a specific upstream version),
+`--no-restart`, `-h`.
+
 ## Why
 
 The wheel already switches workspaces over the desktop background
@@ -23,6 +55,8 @@ ambiguity.
 
 * `xfwm4-scroll-workspace-switch.patch` — the patch (taken against 4.20.0;
   applies to `master` with a bit of fuzz)
+* `install.sh` — self-contained installer (checks the installed version, builds
+  and installs; also `--check` / `--uninstall`)
 * `upstream-issue.md` — the write-up used for the upstream request
 
 ## What the patch changes (`src/moveresize.c`)
